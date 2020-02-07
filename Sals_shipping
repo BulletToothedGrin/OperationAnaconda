@@ -1,0 +1,64 @@
+### Step 1 ###
+def ground_rate(weight):
+  if (weight<=2):
+    cost=weight*1.5+20
+    return cost
+  elif(weight>2) and (weight<=6):
+    cost=weight*3+20
+    return cost
+  elif(weight>6) and (weight<=10):
+    cost=weight*4+20
+    return cost
+  else:
+    cost=weight*3+20
+    return cost
+
+### Step 2 ###
+print (ground_rate(8.4))
+
+
+### Step 3 ###
+prem_rate = 125
+
+### Step 4 ###
+def drone_rate(weight):
+  if (weight<=2):
+    cost=weight*4.5
+    return cost
+  elif(weight>2) and (weight<=6):
+    cost=weight*9
+    return cost
+  elif(weight>6) and (weight<=10):
+    cost=weight*12
+    return cost
+  else:
+    cost=weight*14.25
+    return cost
+
+### Step 5 ###
+print(drone_rate(1.5))
+
+
+### Step 6 ###
+
+def best_rate(weight):
+  if  (ground_rate(weight) < drone_rate(weight)) and (ground_rate(weight) < prem_rate):
+    return "The cheapest way to ship a "+ str(weight) + " pound package is using Ground Shipping and will cost $" + str(ground_rate(weight))
+  elif  (drone_rate(weight) < prem_rate):
+    return "The cheapest way to ship a "+ str(weight) + " pound package is using Drone Shipping and will cost $" + str(drone_rate(weight))
+  else:
+    return "The cheapest way to ship a "+ str(weight) + " pound package is using Premium Shipping at a $125 flat rate"
+  
+### Step 7 ###
+
+weight = 4.8
+print ("Ground : $"+ str(ground_rate(weight)))
+print ("Drone : $"+ str(drone_rate(weight)))
+print (best_rate(weight))
+print()
+
+weight = 41.5
+print ("Ground : $"+ str(ground_rate(weight)))
+print ("Drone : $"+ str(drone_rate(weight)))
+print (best_rate(weight))
+print()
