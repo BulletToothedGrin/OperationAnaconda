@@ -9,6 +9,8 @@ money = 100
 # Write your game of chance functions here
 
 ### Game sub-functions ###
+
+### Bet placement sub-function ###
 def place_bet(money,bet=0):
     ## Bet input and data validation ##
 
@@ -27,12 +29,22 @@ def place_bet(money,bet=0):
             print("Bet placed is: ")
             print ("$" + str(bet))
             return bet
+
+### Game Over message###
 def game_over(money):
     if (money <= 0):
         print("You've run out of money to bet!")
         print("GAME OVER!")
         sys.exit(0)
 
+### Quit ###
+def quit_game(money):
+    print ("Thanks for playing! Your end credit is:")
+    print ("$"+str(money))
+    sys.exit(0)
+
+
+######################
 ### Game functions ###
 ### Menu function ###
 def game_menu(money):
@@ -40,14 +52,15 @@ def game_menu(money):
     print()
     print("1 - Coin Flip")
     print("2 - Cho-Han")
-    print("3 - Magic Cards")
+    print("3 - Card Duel")
     print("4 - Roulette")
+    print("Enter '5' to Quit")
     print()
     print("Credit : $" + str(money))
 
     while True:
         try:
-            game = int(input("Selection 1 - 4?"))
+            game = int(input("Please enter your selection:  "))
         except ValueError:
             print("Invalid entry, please try again")
             continue
@@ -62,10 +75,13 @@ def game_menu(money):
             cho_han(money)
 
         elif (game == 3):
-            cards(money)
+            card_duel(money)
 
         elif (game == 4):
             roulette(money)
+
+        elif (game == 5):
+            quit_game(money)
 
         else:
             return "Please make another selection"
@@ -89,7 +105,7 @@ def coin_flip(money):
         else:
             break
 
-    if (guess == "heads") or (guess == "Heads"):
+    if (guess == "heads"):
         guess = 1
     else:
         guess = 2
@@ -133,7 +149,257 @@ def coin_flip(money):
 
 ### Game 2 - Cho-Han ###
 def cho_han(money):
-    
+
+    print("Welcome to Cho-Han!")
+    print()
+    print("Guess if the result of two rolled die is even or odd")
+    print("Current credit is: $" + str(money))
+    print()
+
+    while True:
+        guess = input("Odd or Even?")
+        guess = guess.lower()
+        if (guess != "odd") and (guess != "even"):
+            print(guess)
+            print ("Please enter either 'Odd' or 'Even'. Try again.")
+            continue
+        else:
+            break
+
+    if (guess == "odd"):
+        guess = 1
+    else:
+        guess = 0
+
+    print()
+    bet = place_bet(money)
+    print()
+
+    dice_total = random.randint(1,6)
+    dice_total += random.randint(1,6)
+    result = dice_total % 2
+
+    if (result == 0):
+        print("Even!")
+    else:
+        print("Odd!")
+
+    print ()
+    print ()
+
+    if (guess != result):
+        money = money - bet
+        print("You lost!")
+        print("Your credit is now $" + str(money))
+
+
+    elif (guess == result):
+        money = money + bet
+        print("You've Won!")
+        print("Your credit is now $" + str(money))
+
+
+
+
+    print()
+    game_over(money)
+    print("Play again?")
+    loop = input("y/n")
+
+    if (loop != "y"):
+        game_menu(money)
+    else:
+        cho_han(money)
+
+### Game 3 - 52 Draw ###
+def card_duel(money):
+
+    print("Welcome to Card Duel!")
+    print()
+    print("Draw a card, and bet if your hand is higher")
+    print("Standard card values - Face cards are worth 10, Aces high.")
+    print("Current credit is: $" + str(money))
+    print()
+
+    dealer_hand = random.randint(1, 13)
+    player_hand = random.randint(1,13)
+    suite = random.randint(1,4)
+    if (suite == 1):
+        suite = " of Spades"
+    elif (suite == 2):
+        suite = " of Hearts"
+    elif (suite == 3):
+        suite = " of Diamonds"
+    else:
+        suite = " of Clubs"
+
+    print("Your card is:")
+    if (player_hand == 11):
+        print("Jack" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 12):
+        print("Queen" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 13):
+        print("King" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 1):
+        print("Ace" + str(suite) + "!")
+        player_hand = 11
+    else:
+        print (str(player_hand)+suite)
+
+
+    print()
+    bet = place_bet(money)
+    print()
+
+    print("Dealer draws a card....")
+    print()
+    print()
+
+    suite = random.randint(1,4)
+    if (suite == 1):
+        suite = " of Spades"
+    elif(suite == 2):
+        suite = " of Hearts"
+    elif(suite == 3):
+        suite = " of Diamonds"
+    elif(suite == 4):
+        suite = " of Clubs"
+
+    if (dealer_hand == 11):
+        print("Jack!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 12):
+        print("Queen!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 13):
+        print("King!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 1):
+        print("Ace!" + str(suite) + "!")
+        dealer_hand = 11
+    else:
+        print (str(dealer_hand) + suite)
+
+
+    if (dealer_hand>player_hand):
+        money = money - bet
+        print("You lost!")
+        print("Your credit is now $" + str(money))
+    elif (player_hand>dealer_hand):
+        money = money + bet
+        print("You've Won!")
+        print("Your credit is now $" + str(money))
+    elif (player_hand==dealer_hand):
+        print("Its a draw! No one looses!")
+
+
+    print()
+    game_over(money)
+    print("Play again?")
+    loop = input("y/n")
+
+    if (loop != "y"):
+        game_menu(money)
+    else:
+        card_duel(money)
+
+### Game 4 - Roulette ###
+def card_duel(money):
+
+    print("Welcome to Roulette!")
+    print()
+    print("Draw a card, and bet if your hand is higher")
+    print("Standard card values - Face cards are worth 10, Aces high.")
+    print("Current credit is: $" + str(money))
+    print()
+
+    dealer_hand = random.randint(1, 13)
+    player_hand = random.randint(1,13)
+    suite = random.randint(1,4)
+    if (suite == 1):
+        suite = " of Spades"
+    elif (suite == 2):
+        suite = " of Hearts"
+    elif (suite == 3):
+        suite = " of Diamonds"
+    else:
+        suite = " of Clubs"
+
+    print("Your card is:")
+    if (player_hand == 11):
+        print("Jack" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 12):
+        print("Queen" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 13):
+        print("King" + str(suite) + "!")
+        player_hand = 10
+    elif (player_hand == 1):
+        print("Ace" + str(suite) + "!")
+        player_hand = 11
+    else:
+        print (str(player_hand)+suite)
+
+
+    print()
+    bet = place_bet(money)
+    print()
+
+    print("Dealer draws a card....")
+    print()
+    print()
+
+    suite = random.randint(1,4)
+    if (suite == 1):
+        suite = " of Spades"
+    elif(suite == 2):
+        suite = " of Hearts"
+    elif(suite == 3):
+        suite = " of Diamonds"
+    elif(suite == 4):
+        suite = " of Clubs"
+
+    if (dealer_hand == 11):
+        print("Jack!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 12):
+        print("Queen!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 13):
+        print("King!" + str(suite) + "!")
+        dealer_hand = 10
+    elif (dealer_hand == 1):
+        print("Ace!" + str(suite) + "!")
+        dealer_hand = 11
+    else:
+        print (str(dealer_hand) + suite)
+
+
+    if (dealer_hand>player_hand):
+        money = money - bet
+        print("You lost!")
+        print("Your credit is now $" + str(money))
+    elif (player_hand>dealer_hand):
+        money = money + bet
+        print("You've Won!")
+        print("Your credit is now $" + str(money))
+    elif (player_hand==dealer_hand):
+        print("Its a draw! No one looses!")
+
+
+    print()
+    game_over(money)
+    print("Play again?")
+    loop = input("y/n")
+
+    if (loop != "y"):
+        game_menu(money)
+    else:
+        card_duel(money)
 
 # Call your game of chance functions here
 
