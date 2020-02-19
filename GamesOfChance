@@ -1,0 +1,142 @@
+import random
+import sys
+
+money = 100
+
+
+# num = random.randint(1,10)
+# generates random number between 1 and 10
+# Write your game of chance functions here
+
+### Game sub-functions ###
+def place_bet(money,bet=0):
+    ## Bet input and data validation ##
+
+    while True:
+        try:
+            print("Please enter your bet. Your current credit is : $" + str(money))
+            bet = int(input( "$"))
+        except ValueError:
+            print("Invalid entry, try again. Please enter your bet. Your current credit is : $" + str(money))
+            continue
+
+        if (bet>int(money)) or (bet <= 0):
+            print ("Invalid bet, please re-place your bet")
+            continue
+        else:
+            print("Bet placed is: ")
+            print ("$" + str(bet))
+            return bet
+def game_over(money):
+    if (money <= 0):
+        print("You've run out of money to bet!")
+        print("GAME OVER!")
+        sys.exit(0)
+
+### Game functions ###
+### Menu function ###
+def game_menu(money):
+    print("Please Selet a game of chance using 1-3")
+    print()
+    print("1 - Coin Flip")
+    print("2 - Cho-Han")
+    print("3 - Magic Cards")
+    print("4 - Roulette")
+    print()
+    print("Credit : $" + str(money))
+
+    while True:
+        try:
+            game = int(input("Selection 1 - 4?"))
+        except ValueError:
+            print("Invalid entry, please try again")
+            continue
+        else:
+            break
+
+    while True:
+        if (game == 1):
+           coin_flip(money)
+
+        elif (game == 2):
+            cho_han(money)
+
+        elif (game == 3):
+            cards(money)
+
+        elif (game == 4):
+            roulette(money)
+
+        else:
+            return "Please make another selection"
+            continue
+
+### Game 1 - Coin Flip ###
+def coin_flip(money):
+
+    print("Welcome to Coin Flip!")
+    print()
+    print("Current credit is: $" + str(money))
+    print()
+
+    while True:
+        guess = input("Heads or Tails")
+        guess = guess.lower()
+        if (guess != "heads") and (guess != "tails"):
+            print(guess)
+            print ("Please enter either 'Heads' or 'Tails'. Try again.")
+            continue
+        else:
+            break
+
+    if (guess == "heads") or (guess == "Heads"):
+        guess = 1
+    else:
+        guess = 2
+
+    print()
+    bet = place_bet(money)
+    print()
+
+    result = random.randint(1, 2)
+    if (result == 1):
+        print("Heads!")
+    else:
+        print("Tails!")
+
+    print ()
+    print ()
+
+    if (guess != result):
+        money = money - bet
+        print("You lost!")
+        print("Your credit is now $" + str(money))
+
+
+    elif (guess == result):
+        money = money + bet
+        print("You've Won!")
+        print("Your credit is now $" + str(money))
+
+
+
+
+    print()
+    game_over(money)
+    print("Play again?")
+    loop = input("y/n")
+
+    if (loop != "y"):
+        game_menu(money)
+    else:
+        coin_flip(money)
+
+### Game 2 - Cho-Han ###
+def cho_han(money):
+    
+
+# Call your game of chance functions here
+
+game_menu(money)
+
+
